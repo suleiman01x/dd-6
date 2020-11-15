@@ -3,15 +3,36 @@ from os.path import isfile, join
 from datetime import datetime
 
 
+class Logger:
+    def __init__(self, dir):
+        self.logs = Logger.fromDirectory(dir)
+        self.users = list(self.logs.keys())
+
+    @staticmethod
+    def fromDirectory(dir):
+        logFiles = listdir(dir)
+        users = {}
+        for fileName in logFiles:
+            users[fileName[:-4]] = User(join(dir, fileName))
+        return users
+
 class User:
     def __init__(self, fileDir):
         self.logs = User.fromFile(fileDir)
 
-    def steps(self):
-        out = []
+    def steps(self, time):
         for log in self.logs:
-            out.append(log[1])
+            if time == log[0]:
+                out = log[1]
+        if not out:
+            print('time {} not found'.format(time))
         return out
+
+    def stepsFromIndex(self, indexNum):
+        return self.logs[indexNum][1]
+
+    def timeFromIndex(self, indexNum):
+        return self.logs[indexNum][0]
 
     @staticmethod
     def fromFile(fileDir):
@@ -30,5 +51,5 @@ class User:
         return tempLogs
 
 if __name__ == '__main__':
-    foo = User('../data/0101.csv')
-    print(foo.logs)
+    foo = Logger('../data')
+    print(foo.users[0])
