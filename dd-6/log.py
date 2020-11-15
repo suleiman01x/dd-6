@@ -7,6 +7,12 @@ class User:
     def __init__(self, fileDir):
         self.logs = User.fromFile(fileDir)
 
+    def steps(self):
+        out = []
+        for log in self.logs:
+            out.append(log[1])
+        return out
+
     @staticmethod
     def fromFile(fileDir):
         data = []
@@ -16,11 +22,10 @@ class User:
         tempLogs = []
         for log in data:
             date, time, num = log.split(',')
-            if log == 'date,time,steps':
+            if log.startswith('date') :
                 continue
             
-            print(date + time)
-            tempLogs.append((datetime.strptime(date + time, '%Y%m%d%H:%M:%S'), int(num[:-2])))
+            tempLogs.append((datetime.strptime(date + time, '%Y%m%d%H:%M:%S'), int(num)))
 
         return tempLogs
 
