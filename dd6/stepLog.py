@@ -9,16 +9,47 @@ def indexFirstElement(_list, key):
             return index
 
 class Logger:
+    """
+    複数のユーザーのログを処理するためのツール。デフォルトではあるディレクトリの各csvファイルを一人のユーザーとして扱い、そのファイル名をユーザー名とする。
+
+    Attributes
+    --------------
+    logs : dict of (str, object)
+        キーをユーザー名、値をそのユーザーのログデータとした全ユーザーのログの辞書
+    users : list of str
+        全ユーザー名
+    searchFrame : int
+        探索窓幅　デフォルトで60
+    minMother : int
+        ポイントをつけるのに最低限必要な分母の大きさ
+    minTime : int
+        ポイントが入るのにしきい値が継続しないといけない時間
+    maxDiss : int
+        ポイントをつけるためのしきい値
+
+    Methods
+    ---------------
+    getPoint(user1:str, user2:str)
+        user1とuser2の関係をポイントで示す。分母がminMotherより大きく、非類似度がmaxDiss以下の時間がminTime以上続くたびに1ポイント獲得する
+    getDissim(user1:str, user2:str, frame:int)
+        user1とuser2の非類似度をすべてリストにして返す
+    getRawDissim(user1:str, user2:str)
+        各時間の分子と分母のリストを返す。分子：(a - b) ^ 2 分母：(a^2 + b^2)
+    getRaw(user1:str, user2:str)
+        ログの開始時間を揃える。二つのログデータを返す
+    fromDirectory(dir:str)
+        あるディレクトリ内のcsvファイルからUserオブジェクトの辞書を作る
+    """
     minMother = 5500
     maxDiss = 0.05
     minTime = 15
     searchFrame = 60
 
-    def __init__(self, dir):
+    def __init__(self, dir:str) -> None:
         self.logs = Logger.fromDirectory(dir)
         self.users = list(self.logs.keys())
 
-    def getPoint(self, user1, user2):
+    def getPoint(self, user1:str, user2:str) -> int:
         minMother = self.minMother
         frame = self.searchFrame
         maxDiss = self.maxDiss
@@ -33,7 +64,7 @@ class Logger:
         return point
 
 
-    def getDissim(self, user1, user2, frame):
+    def getDissim(self, user1:str, user2:str, frame:int) -> tuple:
         child, mother = self.getRawDissim(user1, user2)
 
         dissim = []

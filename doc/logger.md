@@ -1,11 +1,7 @@
-# データドリブンの課題のためのやつ
+# *Object* Logger
+ログ分析するためのツール
 
-## Logger(dir)
-___
-An interface for managing user logs from User object
-
-### Logger.**logs**
-*dict* Raw logs for every user. 
+## Logger.**logs**
 #
     {
         'User1': [
@@ -20,4 +16,4 @@ An interface for managing user logs from User object
         ],
         ...
     }
-### Logger.**users**
+## Logger.**users**
